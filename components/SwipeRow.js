@@ -13,7 +13,7 @@ import {
 	View
 } from 'react-native';
 
-const PREVIEW_OPEN_DELAY = 700;
+const PREVIEW_OPEN_DELAY = 500;
 const PREVIEW_CLOSE_DELAY = 300;
 
 /**
@@ -68,10 +68,14 @@ class SwipeRow extends Component {
 
 		if (this.props.preview && !this.ranPreview) {
 			this.ranPreview = true;
-			let previewOpenValue = this.props.previewOpenValue || this.props.rightOpenValue * 0.5;
-			this.getPreviewAnimation(previewOpenValue, PREVIEW_OPEN_DELAY)
+			let leftPreviewOpenValue = this.props.leftPreviewOpenValue || this.props.leftOpenValue;
+			let rightPreviewOpenValue = this.props.rightPreviewOpenValue || this.props.rightOpenValue;
+			this.getPreviewAnimation(rightPreviewOpenValue, PREVIEW_OPEN_DELAY)
 			.start( _ => {
-				this.getPreviewAnimation(0, PREVIEW_CLOSE_DELAY).start();
+				this.getPreviewAnimation(leftPreviewOpenValue, PREVIEW_CLOSE_DELAY).start( _ => {
+						this.getPreviewAnimation(0, PREVIEW_CLOSE_DELAY).start();
+					}
+				);
 			});
 		}
 	}
